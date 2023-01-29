@@ -1,0 +1,59 @@
+
+/*Query1*/Find the sales in terms of quantity over the years?
+
+SELECT STRFTIME('%Y', i.InvoiceDate ) Year , sum(l.Quantity) Quantity
+from Invoice i
+JOIN InvoiceLine l
+on i.InvoiceId = l.InvoiceId
+GROUP by 1
+order by 1;
+
+
+
+/*query2*/What is the best-selling genre in 2013?
+
+SELECT g.Name , sum(l.Quantity) Quantity
+from genre g
+join Track t
+on g.GenreId = t.GenreId
+join InvoiceLine l
+on t.TrackId = l.TrackId
+join Invoice i
+on l.InvoiceId = i.InvoiceId
+where i.InvoiceDate BETWEEN '2013-01-01' and '2013-12-31'
+group by 1
+order by 2 DESC
+LIMIT 5;
+
+
+
+/*Query3*/Who is the top Jazz artist in terms of sales volume?
+
+select a.ArtistId , a.Name , sum(i.UnitPrice*i.Quantity) Total
+from Artist a
+join Album al
+on a.ArtistId = al.ArtistId
+join Track t
+on al.AlbumId = t.AlbumId
+join Genre g
+on t.GenreId = g.GenreId
+join InvoiceLine i
+on t.TrackId = i.TrackId
+where g.Name = 'Jazz'
+group by 1,2
+order by 3 desc
+limit 5;
+
+
+
+/*Query4*/Who is the best Sales Support Agent?
+
+SELECT e.EmployeeId , e.FirstName , e.LastName , count(c.CustomerId) "Number of Customers"
+from Employee e
+join Customer c
+on e.EmployeeId = c.SupportRepId
+where e.EmployeeId = 3 or 4 or 5
+group by 1,2,3
+order by 4 desc;
+
+
